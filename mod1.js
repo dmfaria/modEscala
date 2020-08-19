@@ -34,7 +34,7 @@ function modificaEscala(){
   }
   
   //Indica que a escala foi modificada
-  lis[0].outerHTML = "<li class='textbox' style='background-color: #000000;color: white;text-align: center; font-size: 14px; font-weight: bold;' >ESCALA COM VALE</li> " + lis[0].outerHTML;
+  lis[0].outerHTML = "<li class='textbox' style='background-color: #000000;color: white;text-align: center; font-size: 14px; font-weight: bold;' >ESCALA COM VALE-DESCANSO</li> " + lis[0].outerHTML;
 }
 
 
