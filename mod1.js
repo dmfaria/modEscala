@@ -1,3 +1,4 @@
+function modificaEscala(){
   var lis = document.querySelectorAll("ul.pageitem > li.textbox[onclick*=ppPrat]"); //pega todos elementos li contendo as pontuacoes
   var hrsdescanso = 6; //tempo em horas para ficar indisponível
   var arr = [];
@@ -19,8 +20,10 @@
           var pos = 1;
           for (var j = 0; j < lis.length; j++) {
             hrsdescansotmp = Math.floor(((today - retornaDataehora(lis[j].children[1].innerHTML))/1000)/3600); //horas de descanso da pessoa analisada
-            if (i!=j && dh_liberacao >= retornaDataehora(lis[j].children[1].innerHTML) && hrsdescansotmp < hrsdescanso && (lis[j].style.backgroundColor == "rgb(252, 254, 212)" || lis[j].style.backgroundColor == "rgb(211, 211, 211)")) {
-              pos++;
+            if (i!=j && hrsdescansotmp < hrsdescanso && (lis[j].style.backgroundColor == "rgb(252, 254, 212)" || lis[j].style.backgroundColor == "rgb(211, 211, 211)")) {
+              if (dh_liberacao > retornaDataehora(lis[j].children[1].innerHTML) || (dh_liberacao.getTime() == retornaDataehora(lis[j].children[1].innerHTML).getTime() && j<i)){
+                pos++;
+              }              
             }
           }
           //modifica a vizualização
@@ -29,13 +32,14 @@
       }
     }
   }
-
+}
 
 
 //Transforma o texto yy/hh:mm em datetime - considerando as viradas de mes e de ano
 function retornaDataehora (dateString) {      
   var reggie = /(\d{2})\/(\d{2}):(\d{2})/;
   var dateArray = reggie.exec(dateString);
+  var today = new Date();
   var mes = today.getMonth();
   var ano = today.getFullYear();
   if (+dateArray[1] > today.getDate()) { //caso tenha virado o mês
