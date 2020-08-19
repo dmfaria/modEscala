@@ -3,8 +3,6 @@ function modificaEscala(){
   var hrsdescanso = 6; //tempo em horas para ficar indisponível
   var arr = [];
   var today = new Date(); //data e hora do momento
-  //Indica que a escala está sendo modificada
-  lis[0].outerHTML = "<li class='textbox' style='background-color: #000000;color: white;text-align: center; font-size: 14px; font-weight: bold;' >ESCALA COM VALE</li>" + lis[0].outerHTML;
   
   for (var i = 0; i < lis.length; i++) {  
     //pega dh_liberacao 
@@ -34,6 +32,9 @@ function modificaEscala(){
       }
     }
   }
+  
+  //Indica que a escala foi modificada
+  lis[0].outerHTML = "<li class='textbox' style='background-color: #000000;color: white;text-align: center; font-size: 14px; font-weight: bold;' >ESCALA COM VALE</li> " + lis[0].outerHTML;
 }
 
 
