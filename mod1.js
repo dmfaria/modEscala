@@ -2,7 +2,7 @@ modificaEscala();
 
 function modificaEscala(){
   var lis = document.querySelectorAll("ul.pageitem > li.textbox[onclick*=ppPrat]"); //pega todos elementos li contendo as pontuacoes
-  var hrsdescanso = 3; //tempo em horas para ficar indisponível
+  var hrsdescanso = 6; //tempo em horas para ficar indisponível
   var arr = [];
   var today = new Date(); //data e hora do momento
   var posdisponiveis = 1; //posicao de cada um na fila
