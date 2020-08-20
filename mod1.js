@@ -1,6 +1,6 @@
 function modificaEscala(){
   var lis = document.querySelectorAll("ul.pageitem > li.textbox[onclick*=ppPrat]"); //pega todos elementos li contendo as pontuacoes
-  var hrsdescanso = 7; //tempo em horas para ficar indisponível
+  var hrsdescanso = 6; //tempo em horas para ficar indisponível
   var arr = [];
   var today = new Date(); //data e hora do momento
 
