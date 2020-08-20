@@ -1,6 +1,6 @@
 function modificaEscala(){
   var lis = document.querySelectorAll("ul.pageitem > li.textbox[onclick*=ppPrat]"); //pega todos elementos li contendo as pontuacoes
-  var hrsdescanso = 6; //tempo em horas para ficar indisponível
+  var hrsdescanso = 3; //tempo em horas para ficar indisponível
   var arr = [];
   var today = new Date(); //data e hora do momento
   var posdisponiveis = 1; //posicao de cada um na fila
@@ -47,7 +47,10 @@ function modificaEscala(){
           //modifica a vizualização
           lis[i].style.backgroundColor = "#d3d3d3";          
           lis[i].children[2].innerHTML = pos + "º (até " + ("0" + validade.getHours()).slice(-2) + ":" + ("0" + validade.getMinutes()).slice(-2) +") 😴 " + lis[i].children[2].innerHTML;                
-                        
+          
+          if (diffHrs==hrsdescanso-1 && diffMins >=30){ //ultima meia hora
+            lis[i].children[2].style.color = "red";
+          }
       } 
     }
   }
