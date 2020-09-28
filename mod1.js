@@ -3,10 +3,11 @@ function modificaEscala(){
   var hrsdescanso = 6; //tempo em horas para ficar indisponível
   var arr = [];
   var today = new Date(); //data e hora do momento
+  var arredonda = 1;
 
   for (var i = 0; i < lis.length; i++) {  
     //pega dh_liberacao 
-    dh_liberacao = retornaDataehora(lis[i].children[1].innerHTML);    
+    dh_liberacao = retornaDataehora(lis[i].children[1].innerHTML,arredonda);    
     var validade = new Date(+(dh_liberacao)+hrsdescanso*3600*1000);
 
     //calcula tempo de descanso 
@@ -20,10 +21,11 @@ function modificaEscala(){
       var pos = 1; //inicia contagem
       for (var j = 0; j < lis.length; j++) {        
         if (lis[j].style.backgroundColor == "rgb(252, 254, 212)" || lis[j].style.backgroundColor == "rgb(211, 211, 211)") { //analisa somente os disponíveis
-          hrsdescansotmp = Math.floor(((today - retornaDataehora(lis[j].children[1].innerHTML))/1000)/3600); //horas de descanso da pessoa analisada          
+          hrsdescansotmp = Math.floor(((today - retornaDataehora(lis[j].children[1].innerHTML))/1000)/3600,arredonda); //horas de descanso da pessoa analisada          
           if (diffHrs < hrsdescanso) {
-            //com vale conta apenas pela horário de término            
+            //com vale conta apenas pela horário de término sem arredondar           
             if (i!=j) {
+              dh_liberacao = retornaDataehora(lis[i].children[1].innerHTML); // pega a hora sem arredondar
               if (dh_liberacao > retornaDataehora(lis[j].children[1].innerHTML) || (dh_liberacao.getTime() == retornaDataehora(lis[j].children[1].innerHTML).getTime() && j<i)){
                 pos++;
               }              
@@ -52,19 +54,23 @@ function modificaEscala(){
     }
   }
 
-  //Indica que a escala foi modificada
-  lis[0].outerHTML = "<li class='textbox' style='background-color: #000000;color: white;text-align: center; font-size: 14px; font-weight: bold;' >ESCALA COM VALE</li> " + lis[0].outerHTML;
+  //coloca o aviso dizendo que a escala foi modificada
+  if (lis.length>0) {
+    lis[0].outerHTML = "<li class='textbox' style='background-color: #000000;color: white;text-align: center; font-size: 14px; font-weight: bold;' >ESCALA COM VALE</li> " + lis[0].outerHTML;
+  }
 }
 
 
 //Transforma o texto yy/hh:mm em datetime - considerando as viradas de mes e de ano
 //Arredonda para cima de 30 em 30 minutos
-function retornaDataehora (dateString) {      
+//Parametros: dateString hora no formato yy/hh:mm e arredonda 0 ou 1
+function retornaDataehora (dateString,arredonda) {      
   var reggie = /(\d{2})\/(\d{2}):(\d{2})/;
   var dateArray = reggie.exec(dateString);
   var today = new Date();
   var mes = today.getMonth();
   var ano = today.getFullYear();
+  if (arredonda != 1) {arredonda = 0;}
   if (+dateArray[1] > today.getDate()) { //caso tenha virado o mês
     if (mes == 0) { //janeiro (mes começa em zero) - significa que virou o ano tbm
       mes = 11; // dezembro
@@ -87,7 +93,7 @@ function retornaDataehora (dateString) {
       mes, 
       (+dateArray[1]),
       (+dateArray[2]),
-      (+dateArray[3]+diff),
+      (+dateArray[3]+diff*arredonda),
       0
   ); 
 }
