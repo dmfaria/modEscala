@@ -21,7 +21,7 @@ function modificaEscala(){
       var pos = 1; //inicia contagem
       for (var j = 0; j < lis.length; j++) {        
         if (lis[j].style.backgroundColor == "rgb(252, 254, 212)" || lis[j].style.backgroundColor == "rgb(211, 211, 211)") { //analisa somente os disponíveis
-          hrsdescansotmp = Math.floor(((today - retornaDataehora(lis[j].children[1].innerHTML))/1000)/3600,arredonda); //horas de descanso da pessoa analisada          
+          hrsdescansotmp = Math.floor(((today - retornaDataehora(lis[j].children[1].innerHTML,arredonda))/1000)/3600); //horas de descanso da pessoa analisada          
           if (diffHrs < hrsdescanso) {
             //com vale conta apenas pela horário de término sem arredondar           
             if (i!=j) {
