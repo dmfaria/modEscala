@@ -5,51 +5,53 @@ function modificaEscala(){
   var today = new Date(); //data e hora do momento
   var arredonda = 1;
 
-  for (var i = 0; i < lis.length; i++) {  
-    //pega dh_liberacao 
-    dh_liberacao = retornaDataehora(lis[i].children[1].innerHTML,arredonda);    
-    var validade = new Date(+(dh_liberacao)+hrsdescanso*3600*1000);
+  for (var i = 0; i < lis.length; i++) { 
+    if (lis[i].children[2].innerHTML != "") { //só analisa depois de fazer uma manobra
+      //pega dh_liberacao 
+      dh_liberacao = retornaDataehora(lis[i].children[1].innerHTML,arredonda);    
+      var validade = new Date(+(dh_liberacao)+hrsdescanso*3600*1000);
 
-    //calcula tempo de descanso 
-    var diffMs = (today - dh_liberacao); 
-    var diffHrs = Math.floor((diffMs/1000) / 3600); // hours
-    var diffMins = Math.floor((((diffMs/1000) / 3600)-diffHrs)*60); // minutes  
+      //calcula tempo de descanso 
+      var diffMs = (today - dh_liberacao); 
+      var diffHrs = Math.floor((diffMs/1000) / 3600); // hours
+      var diffMins = Math.floor((((diffMs/1000) / 3600)-diffHrs)*60); // minutes  
 
-    //modifica a visualizacao se a pessoa estiver disponível
-    if (lis[i].style.backgroundColor == "rgb(252, 254, 212)") {//não funciona em todos browsers                
-      //encontra a posição dessa pessoa, entre aqueles que descansaram pouco, ordenados por dh_liberacao (fila tradicional)          
-      var pos = 1; //inicia contagem
-      for (var j = 0; j < lis.length; j++) {        
-        if (lis[j].style.backgroundColor == "rgb(252, 254, 212)" || lis[j].style.backgroundColor == "rgb(211, 211, 211)") { //analisa somente os disponíveis
-          hrsdescansotmp = Math.floor(((today - retornaDataehora(lis[j].children[1].innerHTML,arredonda))/1000)/3600); //horas de descanso da pessoa analisada          
-          if (diffHrs < hrsdescanso) {
-            //com vale conta apenas pela horário de término sem arredondar           
-            if (i!=j) {
-              dh_liberacao = retornaDataehora(lis[i].children[1].innerHTML); // pega a hora sem arredondar
-              if (dh_liberacao > retornaDataehora(lis[j].children[1].innerHTML) || (dh_liberacao.getTime() == retornaDataehora(lis[j].children[1].innerHTML).getTime() && j<i)){
+      //modifica a visualizacao se a pessoa estiver disponível
+      if (lis[i].style.backgroundColor == "rgb(252, 254, 212)") {//não funciona em todos browsers                
+        //encontra a posição dessa pessoa, entre aqueles que descansaram pouco, ordenados por dh_liberacao (fila tradicional)          
+        var pos = 1; //inicia contagem
+        for (var j = 0; j < lis.length; j++) {        
+          if (lis[j].style.backgroundColor == "rgb(252, 254, 212)" || lis[j].style.backgroundColor == "rgb(211, 211, 211)") { //analisa somente os disponíveis
+            hrsdescansotmp = Math.floor(((today - retornaDataehora(lis[j].children[1].innerHTML,arredonda))/1000)/3600); //horas de descanso da pessoa analisada          
+            if (diffHrs < hrsdescanso) {
+              //com vale conta apenas pela horário de término sem arredondar           
+              if (i!=j) {
+                dh_liberacao = retornaDataehora(lis[i].children[1].innerHTML); // pega a hora sem arredondar
+                if (dh_liberacao > retornaDataehora(lis[j].children[1].innerHTML) || (dh_liberacao.getTime() == retornaDataehora(lis[j].children[1].innerHTML).getTime() && j<i)){
+                  pos++;
+                }              
+              }
+            } else {
+              //sem vale, conta a posição
+              if (i>j && hrsdescansotmp >=hrsdescanso) {
                 pos++;
-              }              
-            }
-          } else {
-            //sem vale, conta a posição
-            if (i>j && hrsdescansotmp >=hrsdescanso) {
-              pos++;
+              }
             }
           }
         }
-      }
-      //modifica a vizualização
-      if (diffHrs < hrsdescanso) {
-        //com vale
-        lis[i].style.backgroundColor = "#d3d3d3";          
-        lis[i].children[2].innerHTML = pos + "º (até " + ("0" + validade.getHours()).slice(-2) + ":" + ("0" + validade.getMinutes()).slice(-2) +") 😴 " + lis[i].children[2].innerHTML;                
+        //modifica a vizualização
+        if (diffHrs < hrsdescanso) {
+          //com vale
+          lis[i].style.backgroundColor = "#d3d3d3";          
+          lis[i].children[2].innerHTML = pos + "º (até " + ("0" + validade.getHours()).slice(-2) + ":" + ("0" + validade.getMinutes()).slice(-2) +") 😴 " + lis[i].children[2].innerHTML;                
 
-        if (diffHrs==hrsdescanso-1 && diffMins >=30){ //ultima meia hora
-          lis[i].children[2].style.color = "red";
+          if (diffHrs==hrsdescanso-1 && diffMins >=30){ //ultima meia hora
+            lis[i].children[2].style.color = "red";
+          }
+        } else {
+          //sem vale
+          lis[i].children[2].innerHTML = pos + "º ✔️ " + lis[i].children[2].innerHTML;
         }
-      } else {
-        //sem vale
-        lis[i].children[2].innerHTML = pos + "º ✔️ " + lis[i].children[2].innerHTML;
       }
     }
   }
